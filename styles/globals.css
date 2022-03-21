@@ -6,3 +6,17 @@
 #__next {
     @apply h-full;
 }
+
+.heading2Sidemenu {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.heading3Sidemenu {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cardinput textarea {
+    resize: none;
+  }
