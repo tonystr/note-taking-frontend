@@ -16,6 +16,12 @@
     "atcampus",
     "notetaking"
   ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"]
+    }
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
