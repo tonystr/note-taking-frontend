@@ -30,7 +30,7 @@ function Toolbar() {
             w-64 h-full mr-5 
             text-lg text-black flex justify-center items-center
             border-0 border-orange-600">
-                at<b>Campus</b> &nbsp;  notes
+                <span className="underline">at</span><b>Campus</b> &nbsp;  notes
             </div>
 
             {/* Create buttons */}
