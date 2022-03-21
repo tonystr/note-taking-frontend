@@ -31,7 +31,7 @@ function Toolbar() {
             w-64 h-full 
             text-lg text-black flex justify-center items-center
             border-0 border-orange-600">
-                at<b>Campus</b>  notes
+                at<b>Campus</b> &nbsp; notes
             </div>
 
             {/* Create buttons */}
