@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+// Time to wait after keyboard input before autosaving
+const AUTOSAVE_TIME = 3000;
 
 function MetaInfo() {
     const [title, setTitle] = useState('Untitled note');
@@ -28,12 +30,27 @@ function MetaInfo() {
 
 function TextArea() {
     const [text, setText] = useState('');
+    const autosaveTimer = useRef()
+
+    const autosave = () => {
+        if (autosaveTimer.current !== null) {
+            clearTimeout(autosaveTimer.current);
+            autosaveTimer.current = null;
+        }
+
+        autosaveTimer.current = setTimeout(() => {
+            autosaveTimer.current = null;
+        }, AUTOSAVE_TIME);
+    };
 
     return (
         <textarea
             placeholder='Begin typing here...'
             className='notes-scrollbar px-5 mt-5 grow resize-none outline-none selection:bg-purple-1 selection:text-white'
-            onChange={e => setText(() => e.target.value)}
+            onChange={e => {
+                setText(() => e.target.value);
+                autosave();
+            }}
             value={text}
         />
     );

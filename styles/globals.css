@@ -7,8 +7,19 @@
     @apply h-full;
 }
 
-.notes-scrollbar {
+* {
     scrollbar-width: thin;
     /* Dark-6 */
     scrollbar-color: #E8E8E8 transparent;
+}
+
+
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #E8E8E8;
+    border-radius: 16px;
 }
