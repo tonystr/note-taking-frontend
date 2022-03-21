@@ -4,8 +4,8 @@ function SideTool({ visible, hide }) {
     const [set, setSet] = useState('');
 
     const Grupper = [
-        {label: "DATA2500 Operativsystemer", value: 1},
-        {label: "DATA2410 Datanettverk og skytjenester", value: 2}
+        { label: "DATA2500 Operativsystemer", value: 1 },
+        { label: "DATA2410 Datanettverk og skytjenester", value: 2 }
     ]
 
     function FlashcardPreview({front, back}) {
@@ -18,11 +18,11 @@ function SideTool({ visible, hide }) {
         )
     }
 
-    function CardInput({id, header}) {
+    function CardInput({ id, header, placeholder }) {
         return (
             <div className="cardinput">
                 <h3 className="heading3Sidemenu">{header}</h3>
-                <textarea id={id} className='w-[280px] m-2 px-2 py-1 rounded-lg border-solid border-[1px] border-purple-4 shadow-sm outline-none focus:border-transparent focus:ring-2 focus:ring-purple-3' rows='3'></textarea>
+                <textarea id={id} placeholder={placeholder} className='w-[280px] m-2 px-2 py-1 rounded-lg border-solid border-[1px] border-purple-4 shadow-sm outline-none focus:border-transparent focus:ring-2 focus:ring-purple-3' rows='3'></textarea>
             </div>
         )
     }
@@ -47,8 +47,8 @@ function SideTool({ visible, hide }) {
                 </select>
 
                 {/* Input bokser */}
-                <CardInput id="cardfront" header="Card front" />
-                <CardInput id="cardback" header="Card back" />
+                <CardInput id="cardfront" header="Card front" placeholder="Write card front here" />
+                <CardInput id="cardback" header="Card back" placeholder="Write card back here" />
 
                 {/* Preview ferdig flashcards i sett */}
                 {set === '' ? null : (
