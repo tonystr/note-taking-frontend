@@ -7,13 +7,13 @@ function MetaInfo() {
     return (
         <div className='border-solid border-b-[1px] border-dark-5 flex justify-around items-baseline'>
             <input
-                className='text-dark-2 px-4 inline grow text-2xl outline-none'
+                className='text-dark-2 px-4 inline grow text-2xl outline-none selection:bg-purple-1 selection:text-white'
                 value={title}
                 onChange={e => setTitle(() => e.target.value)}
             />
-            <div className='text-dark-3 inline-block w-32 h-9 translate-y-2 text-xl text-center relative'>
+            <div className='text-dark-3 inline-block w-32 h-9 translate-y-2 text-xl text-center relative focus-within:bg-purple-1 focus-within:text-white rounded'>
                 <input
-                    className='absolute grow inset-0 opacity-0'
+                    className='cursor-pointer absolute grow inset-0 opacity-0'
                     type='date'
                     value={date}
                     onChange={e => setDate(() => e.target.value)}
@@ -27,15 +27,21 @@ function MetaInfo() {
 }
 
 function TextArea() {
+    const [text, setText] = useState('');
+
     return (
-        <textarea placeholder='Begin typing here...' className='p-5 pb-0 grow resize-none'>
-        </textarea>
+        <textarea
+            placeholder='Begin typing here...'
+            className='notes-scrollbar px-5 mt-5 grow resize-none outline-none selection:bg-purple-1 selection:text-white'
+            onChange={e => setText(() => e.target.value)}
+            value={text}
+        />
     );
 }
 
 function TextEditor() {
     return (
-        <div className='mt-12 mx-auto w-2/5 flex flex-col'>
+        <div className='mt-12 mx-auto flex flex-col'>
             <MetaInfo />
             <TextArea />
         </div>
