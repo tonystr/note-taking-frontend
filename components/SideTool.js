@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function SideTool({ hidden }) {
+function SideTool({ visible, hide }) {
     const [set, setSet] = useState('');
 
     const Grupper = [
@@ -29,7 +29,8 @@ function SideTool({ hidden }) {
 
     return (
         <div className='w-[320px]'>
-            <div className={`${hidden ? 'hidden' : ''} h-full px-2 py-1 bg-purple-5 border-l-[1px] border-solid border-dark-6 flex flex-col`}>
+            <div className={`${visible ? '' : 'hidden'} relative h-full px-2 py-1 bg-purple-5 border-l-[1px] border-solid border-dark-6 flex flex-col`}>
+                <button className='absolute right-0 mr-3 text-dark-3' onClick={() => hide()}>X</button>
                 <h2 className="heading2Sidemenu">Add a new flashcard in:</h2>
 
                 {/* Nedtrekk valg meny */}
