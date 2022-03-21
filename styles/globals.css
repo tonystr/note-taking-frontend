@@ -7,7 +7,7 @@
     @apply h-full;
 }
 
-* {
+.notes-scrollbar {
     scrollbar-width: thin;
     /* Dark-6 */
     scrollbar-color: #E8E8E8 transparent;
