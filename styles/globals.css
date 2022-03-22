@@ -7,6 +7,22 @@
     @apply h-full;
 }
 
+.notes-scroll, input[value='text'], textarea {
+    scrollbar-width: thin;
+    /* Dark-6 */
+    scrollbar-color: #E8E8E8 transparent;
+}
+
+::-webkit-scrollbar {
+    background-color: transparent;
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #E8E8E8;
+    border-radius: 16px;
+}
+
 .heading2Sidemenu {
     font-size: 18px;
     font-weight: 500;
@@ -19,4 +35,4 @@
 
 .cardinput textarea {
     resize: none;
-  }
+}

@@ -1,35 +1,19 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import Toolbar from '../components/Toolbar';
 import Sidebar from '../components/Sidebar';
 import TextEditor from '../components/TextEditor';
 import SideTool from '../components/SideTool'
 
-function Editor() {
-    const [title, setTitle] = useState('Untitled note');
-
-    return (
-        <div className='grow'>
-            <div className='my-12 mx-auto w-1/3 flex flex-col'>
-                <input
-                    className='text-dark-2 px-4 text-2xl border-solid border-b-[1px] border-dark-5 outline-none'
-                    value={title}
-                    onChange={e => setTitle(() => e.target.value)}
-                />
-                <TextEditor />
-            </div>
-        </div>
-    );
-}
-
 function NoteEditor() {
+    const [sideToolVisible, setSideToolVisible] = useState(false);
 
     return (
         <div className='h-screen h-full flex flex-col'>
-            <Toolbar />
+            <Toolbar viewFlashcardEditor={() => setSideToolVisible(() => true)} />
             <div className="flex h-full">
                 <Sidebar />
-                <Editor />
-                <SideTool hidden={false} />
+                <TextEditor />
+                <SideTool visible={sideToolVisible} hide={() => setSideToolVisible(() => false)} />
             </div>
         </div>
     )
