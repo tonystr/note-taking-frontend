@@ -8,6 +8,7 @@ function Button({ children, className='', ...props }) {
             p-2 flex px-3 mx-2 cursor-pointer
             hover:bg-purple-4 rounded-md
             transition-colors duration-100
+            items-center
             ${className}
         `}>
             {children}

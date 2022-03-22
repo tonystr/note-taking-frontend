@@ -23,7 +23,7 @@ function CreateButton({id, text, children, onClick }) {
     );
 }
 
-function Toolbar({ viewFlashcardEditor }) {
+function Toolbar({ viewFlashcardEditor, viewQuestionEditoor }) {
     return (
         <div className="w-full h-20 flex text-md text-purple-1 bg-purple-5 border-b-[1px] border-dark-6">
 
@@ -43,7 +43,7 @@ function Toolbar({ viewFlashcardEditor }) {
                 <FlashcardIcon />
             </CreateButton>
 
-            <CreateButton id="CreateQnA" text="Question" >
+            <CreateButton id="CreateQnA" text="Question" onClick={viewQuestionEditoor}>
                 <QnAIcon />
             </CreateButton>
 
