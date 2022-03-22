@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useFlashcards, useQuestions } from '../hooks/api'
 
 function FlashcardPreview({ front, back }) {
     return (
@@ -20,6 +21,10 @@ function CardInput({ id, header, placeholder, rows=3 }) {
 
 function QuestionTool({ groups }) {
     const [set, setSet] = useState('');
+    const questions = useQuestions();
+
+
+    console.log(questions);
 
     return (
         <div>
@@ -44,11 +49,12 @@ function QuestionTool({ groups }) {
             {/* Preview ferdig flashcards i sett */}
             {set === '' ? null : (
                 <div>
-                    <h2 className="heading2Sidemenu">Relevant questions in {groups.find(g => g.value === +set)?.label}:</h2>
-                    <FlashcardPreview front="Hyperword" back="A way of doing multiple examples with the same word" />
-                    <FlashcardPreview front="Test forside forside" back="Test bakside bakside bakside bakside bakside bakside" />
-                    <FlashcardPreview front="Test forside forside" back="Test bakside bakside bakside bakside bakside bakside" />
-
+                    <h2 className="heading2Sidemenu">
+                        Relevant questions in {groups.find(g => g.value === +set)?.label}:
+                    </h2>
+                    {questions.map(question => (
+                        <FlashcardPreview front={question.question} key={question.id} />
+                    ))}
                 </div>
             )}
         </div>
@@ -57,6 +63,7 @@ function QuestionTool({ groups }) {
 
 function FlashcardTool({ groups }) {
     const [set, setSet] = useState('');
+    const flashcards = useFlashcards();
 
     return (
         <div>
@@ -82,11 +89,12 @@ function FlashcardTool({ groups }) {
             {/* Preview ferdig flashcards i sett */}
             {set === '' ? null : (
                 <div>
-                    <h2 className="heading2Sidemenu">Flashcards in {groups.find(g => g.value === +set)?.label}:</h2>
-                    <FlashcardPreview front="Hyperword" back="A way of doing multiple examples with the same word" />
-                    <FlashcardPreview front="Test forside forside" back="Test bakside bakside bakside bakside bakside bakside" />
-                    <FlashcardPreview front="Test forside forside" back="Test bakside bakside bakside bakside bakside bakside" />
-
+                    <h2 className="heading2Sidemenu">
+                        Flashcards in {groups.find(g => g.value === +set)?.label}:
+                    </h2>
+                    {flashcards.map(card => (
+                        <FlashcardPreview front={card.front} back={card.back} key={card.id} />
+                    ))}
                 </div>
             )}
         </div>

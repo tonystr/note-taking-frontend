@@ -11,5 +11,19 @@ module.exports = {
         });
 
         return config;
+    },
+    async rewrites() {
+        return [
+            {
+                source: '/api/:query',
+                destination: 'http://localhost:8080/:query'
+            }, {
+                source: '/api/:query/:query2',
+                destination: 'http://localhost:8080/:query/:query2'
+            }, {
+                source: '/api/:query/:query2/:query3',
+                destination: 'http://localhost:8080/:query/:query2/:query3'
+            }
+        ]
     }
 }
