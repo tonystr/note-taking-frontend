@@ -26,4 +26,19 @@ function useQuestions() {
     return questions
 }
 
-export { useFlashcards, useQuestions };
+function createQuestion(body) {
+    console.log(body);
+    fetch('/api/qa/questions', {
+        method: 'POST',
+        body: JSON.stringify({ question: body }),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+    })
+        .then(res => res.json())
+        .then(console.log)
+        .catch(console.error);
+}
+
+export { useFlashcards, useQuestions, createQuestion };
