@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import Toolbar from '../components/Toolbar';
-import Sidebar from '../components/Sidebar';
-import TextEditor from '../components/TextEditor';
-import SideTool from '../components/SideTool'
+import Toolbar from '/components/Toolbar';
+import Sidebar from '/components/Sidebar';
+import TextEditor from '/components/TextEditor';
+import SideTool from '/components/SideTool'
 
 function NoteEditor() {
-    const [sideTool, setSideTool] = useState(null);
+    const [sideTool, setSideTool] = useState<string>(null);
 
     return (
         <div className='h-screen h-full flex flex-col'>

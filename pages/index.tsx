@@ -1,4 +1,4 @@
-import NoteEditor from './noteeditor.js'
+import NoteEditor from './noteeditor'
 
 function Page() {
     return (

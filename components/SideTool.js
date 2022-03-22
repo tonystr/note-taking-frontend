@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useFlashcards, useQuestions, createQuestion } from '../hooks/api'
+import { useFlashcards, useQuestions, createQuestion } from '/hooks/api'
 
 function FlashcardPreview({ front, back }) {
     return (

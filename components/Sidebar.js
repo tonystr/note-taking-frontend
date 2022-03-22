@@ -1,5 +1,5 @@
-import FolderIcon from '../icons/folder.svg'
-import NotesIcon from '../icons/notes.svg'
+import FolderIcon from '/icons/folder.svg'
+import NotesIcon from '/icons/notes.svg'
 
 function Button({ children, className='', ...props }) {
     return (
