@@ -16,19 +16,22 @@ function useFlashcards() {
 function useQuestions() {
     const [questions, setQuestions] = useState([]);
 
-    useEffect(() => {
+    const refreshQuestions = () => {
         fetch('/api/qa/questions')
             .then(res => res.json())
             .then(res => setQuestions(() => res))
             .catch(console.error);
+    }
+    
+    useEffect(() => {
+        refreshQuestions();
     }, []);
 
-    return questions
+    return [questions, refreshQuestions];
 }
 
-function createQuestion(body) {
-    console.log(body);
-    fetch('/api/qa/questions', {
+async function createQuestion(body) {
+    return fetch('/api/qa/questions', {
         method: 'POST',
         body: JSON.stringify({ question: body }),
         headers: {

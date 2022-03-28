@@ -28,7 +28,7 @@ function CardInput({ value, onChange, header, placeholder, rows=3 }) {
 function QuestionTool({ groups, hide }) {
     const [set, setSet] = useState('');
     const [questionInput, setQuestionInput] = useState('');
-    const questions = useQuestions();
+    const [questions, refreshQuestions] = useQuestions();
 
     return (
         <>
@@ -68,7 +68,13 @@ function QuestionTool({ groups, hide }) {
                 </div>
             )}
 
-            <ButtonBar add={() => createQuestion(questionInput)} cancel={hide} />
+            <ButtonBar 
+                add={() => { 
+                    createQuestion(questionInput)
+                        .then(() => refreshQuestions()); 
+                }} 
+                cancel={hide} 
+            />
         </>
     );
 }
@@ -106,7 +112,7 @@ function FlashcardTool({ groups, hide }) {
             />
             <CardInput
                 value={answerInput}
-                onChange={e => setQuestionInput(() => e.target.value)}
+                onChange={e => setAnswerInput(() => e.target.value)}
                 header="Answer"
                 placeholder="Write the answer here"
                 rows={4}
