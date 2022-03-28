@@ -7,11 +7,9 @@ import TextEditor from 'components/TextEditor';
 import SideTool from 'components/SideTool'
 
 function NoteEditor() {
+    const [noteId, setNoteId] = useState<string>(null);
     const [sideTool, setSideTool] = useState<string>(null);
-    const { data: notes } = useApi<Note[]>('notes');
-
-    // For debugging, we use the first note
-    const noteId = notes && notes[0]?.id;
+    const { data: notes, mutate: mutateNotes } = useApi<Note[]>('notes');
 
     return (
         <div className='h-screen h-full flex flex-col'>
@@ -20,7 +18,7 @@ function NoteEditor() {
                 viewQuestionEditoor={() => setSideTool(() => 'question')}
             />
             <div className="flex h-full">
-                <Sidebar />
+                <Sidebar notes={notes} mutateNotes={mutateNotes} noteId={noteId} setNoteId={setNoteId} />
                 {noteId !== null ? <TextEditor noteId={noteId} /> : 'No note selected :)'}
                 <SideTool
                     visible={sideTool !== null}

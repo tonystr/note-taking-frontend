@@ -11,6 +11,14 @@ function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
         update(`notes/${noteId}`, { header }));
     const autosaveDate = useAutoSave((updatedAt: Number) => 
         update(`notes/${noteId}`, { updatedAt }));
+        
+    useEffect(() => {
+        setTitle(() => titleSource);
+    }, [titleSource, noteId]);
+    
+    useEffect(() => {
+        setDate(() => dateSource);
+    }, [dateSource, noteId]);
 
     return (
         <div className='border-solid border-b-[1px] border-dark-5 flex justify-around items-baseline'>
@@ -48,8 +56,8 @@ function TextArea({ noteId, data }) {
         update(`notes/${noteId}`, { details }));
 
     useEffect(() => {
-        setText(() => text);
-    }, [data]);
+        setText(() => data);
+    }, [data, noteId]);
 
     return (
         <textarea
