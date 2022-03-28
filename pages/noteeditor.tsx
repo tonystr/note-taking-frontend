@@ -1,16 +1,17 @@
 import { useState } from 'react'
+import { Note } from 'types';
+import { useApi } from 'utils/api';
 import Toolbar from 'components/Toolbar';
 import Sidebar from 'components/Sidebar';
 import TextEditor from 'components/TextEditor';
 import SideTool from 'components/SideTool'
-import { useNotes } from 'hooks/api';
 
 function NoteEditor() {
     const [sideTool, setSideTool] = useState<string>(null);
-    const [notes, refreshNotes] = useNotes();
+    const { data: notes } = useApi<Note[]>('notes');
 
     // For debugging, we use the first note
-    const noteId = notes[0]?.id;
+    const noteId = notes && notes[0]?.id;
 
     return (
         <div className='h-screen h-full flex flex-col'>

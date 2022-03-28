@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useFlashcards, createFlashcard, useQuestions, createQuestion } from 'hooks/api'
-import { FlashcardInput } from 'types';
+import { createFlashcard, createQuestion } from 'hooks/api'
+import { Question, Flashcard, FlashcardInput } from 'types';
+import { useApi } from 'utils/api';
 
 function FlashcardPreview({ front, back }: { front: String, back?: String }) {
     return (
@@ -29,7 +30,7 @@ function CardInput({ value, onChange, header, placeholder, rows=3 }) {
 function QuestionTool({ groups, hide }) {
     const [set, setSet] = useState('');
     const [questionInput, setQuestionInput] = useState('');
-    const [questions, refreshQuestions] = useQuestions();
+    const { data: questions, mutate: mutateQuestions } = useApi<Question[]>('qa/questions');
 
     return (
         <>
@@ -72,7 +73,7 @@ function QuestionTool({ groups, hide }) {
             <ButtonBar 
                 add={() => { 
                     createQuestion(questionInput).then(() => {
-                        refreshQuestions();
+                        mutateQuestions();
                         setQuestionInput(() => '');
                     }); 
                 }} 
@@ -86,7 +87,9 @@ function FlashcardTool({ groups, hide }) {
     const [set, setSet] = useState('');
     const [questionInput, setQuestionInput] = useState('');
     const [answerInput, setAnswerInput] = useState('');
-    const [flashcards, refreshFlashcards] = useFlashcards();
+    const { data: flashcards, mutate: mutateFlashcards } = useApi<Flashcard[]>('flashcards');
+
+
 
     return (
         <>
@@ -141,7 +144,7 @@ function FlashcardTool({ groups, hide }) {
                         back: answerInput
                     };
                     createFlashcard(flashcard).then(() => {
-                        refreshFlashcards();
+                        mutateFlashcards();
                         setQuestionInput(() => '');
                         setAnswerInput(() => '');
                     }); 

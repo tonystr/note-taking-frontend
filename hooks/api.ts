@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react'
 import { Note, Question, Flashcard, FlashcardInput, RefreshApiCall } from 'types';
+import useSWR from 'swr';
 
 // Note
 
+const fetcher = (url: RequestInfo) => 
+    fetch(url).then(res => res.json());
+
 function useNotes(): [Note[], RefreshApiCall] {
-    const [notes, setNotes] = useState([]);
+    const { data: notes, mutate: mutateNotes } = 
+        useSWR<Note[]>('/api/notes', fetcher)
 
-    const refreshNotes = () => {
-        fetch('/api/notes')
-            .then(res => res.json())
-            .then(res => setNotes(() => res))
-            .catch(console.error);
-    };
-
-    useEffect(() => refreshNotes(), []);
-
-    return [notes, refreshNotes];
+    return [notes, mutateNotes];
 }
 
 function useNote(noteId: String): [Note, RefreshApiCall] {

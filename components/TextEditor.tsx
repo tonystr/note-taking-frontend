@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNote, setNoteText } from 'hooks/api';
+import { setNoteText } from 'hooks/api';
+import { useApi } from 'utils/api';
+import { Note } from 'types';
 
 // Time to wait after keyboard input before autosaving
 const AUTOSAVE_TIME = 3000;
@@ -32,7 +34,7 @@ function MetaInfo({ title, date }) {
 
 function TextArea({ noteId, data }) {
     const [text, setText] = useState(() => data);
-    const autosaveTimer = useRef()
+    const autosaveTimer = useRef<NodeJS.Timeout>();
 
     useEffect(() => {
         setText(() => text);
@@ -69,7 +71,7 @@ function TextArea({ noteId, data }) {
 }
 
 function TextEditor({ noteId }) {
-    const [note, refreshNote] = useNote(noteId);
+    const { data: note } = useApi<Note>(`notes/${noteId}`);
 
     console.log(note);
 
