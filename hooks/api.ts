@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Question, Flashcard } from 'types';
 
 // Note
 
@@ -45,7 +46,7 @@ async function setNoteText(noteId, text) {
         .catch(console.error);
 }
 
-function useNote(noteId) {
+function useNote(noteId: String) {
     const [note, setNote] = useState(null);
 
     const refreshNote = () => {
@@ -62,7 +63,7 @@ function useNote(noteId) {
 
 // Flashcards
 
-function useFlashcards() {
+function useFlashcards(): [ Flashcard[], Function ] {
     const [flashcards, setFlashcards] = useState([]);
 
     const refreshFlashcards = () => {
@@ -94,8 +95,8 @@ async function createFlashcard(header, front, back) {
 
 // QnA questions
 
-function useQuestions() {
-    const [questions, setQuestions] = useState([]);
+function useQuestions(): [Question[], Function] {
+    const [questions, setQuestions]: [Question[], Function] = useState([]);
 
     const refreshQuestions = () => {
         fetch('/api/qa/questions')

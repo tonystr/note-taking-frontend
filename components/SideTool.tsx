@@ -124,7 +124,7 @@ function FlashcardTool({ groups, hide }) {
             {set === '' ? null : (
                 <div>
                     <h2 className="heading2Sidemenu">
-                        Flashcards in {groups.find(g => g.value === +set)?.label}:
+                        Flashcards in {groups.find((g: { value: Number }) => g.value === +set)?.label}:
                     </h2>
                     {flashcards.slice().reverse().map(card => (
                         <FlashcardPreview front={card.front} back={card.back} key={card.id} />
@@ -159,7 +159,7 @@ function ButtonBar({ add, cancel }) {
 }
 
 function SideTool({ tool, visible, hide }) {
-    const groups = [
+    const groups: { label: String, value: Number }[] = [
         { label: "DATA2500 Operativsystemer", value: 1 },
         { label: "DATA2410 Datanettverk og skytjenester", value: 2 }
     ];
