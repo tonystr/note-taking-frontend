@@ -42,9 +42,11 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
                     <NotesIcon className='inline mr-4' />
                     Study notes
                 </div>
-                <div className="bg-white px-2 rounded-full text-purple-1">
-                    5
-                </div>
+                {notes && (
+                    <div className="bg-white px-2 rounded-full text-purple-1">
+                        {notes.length}
+                    </div>
+                )}
             </div>
             <Button onClick={() => createNewNote()} className="relative mb-4 mt-1">
                 <span className="text-xl font-thin absolute top-0">+</span>

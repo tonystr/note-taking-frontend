@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Note } from 'types';
 import { useApi } from 'utils/api';
 import Toolbar from 'components/Toolbar';
@@ -9,7 +9,14 @@ import SideTool from 'components/SideTool'
 function NoteEditor() {
     const [noteId, setNoteId] = useState<string>(null);
     const [sideTool, setSideTool] = useState<string>(null);
-    const { data: notes, mutate: mutateNotes } = useApi<Note[]>('notes');
+    const { data: notes, mutate: mutateNotes, isValidating } = useApi<Note[]>('notes');
+
+    // Auto select first note upon fetch
+    useEffect(() => {
+        if (!isValidating && noteId === null) {
+            setNoteId(notes[0]?.id);
+        }
+    }, [noteId, notes, isValidating]);
 
     return (
         <div className='h-screen h-full flex flex-col'>
