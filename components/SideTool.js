@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useFlashcards, useQuestions, createQuestion } from '/hooks/api'
+import { useFlashcards, createFlashcard, useQuestions, createQuestion } from '/hooks/api'
 
 function FlashcardPreview({ front, back }) {
     return (
@@ -70,8 +70,10 @@ function QuestionTool({ groups, hide }) {
 
             <ButtonBar 
                 add={() => { 
-                    createQuestion(questionInput)
-                        .then(() => refreshQuestions()); 
+                    createQuestion(questionInput).then(() => {
+                        refreshQuestions();
+                        setQuestionInput(() => '');
+                    }); 
                 }} 
                 cancel={hide} 
             />
@@ -83,7 +85,7 @@ function FlashcardTool({ groups, hide }) {
     const [set, setSet] = useState('');
     const [questionInput, setQuestionInput] = useState('');
     const [answerInput, setAnswerInput] = useState('');
-    const flashcards = useFlashcards();
+    const [flashcards, refreshFlashcards] = useFlashcards();
 
     return (
         <>
@@ -124,13 +126,22 @@ function FlashcardTool({ groups, hide }) {
                     <h2 className="heading2Sidemenu">
                         Flashcards in {groups.find(g => g.value === +set)?.label}:
                     </h2>
-                    {flashcards.map(card => (
+                    {flashcards.slice().reverse().map(card => (
                         <FlashcardPreview front={card.front} back={card.back} key={card.id} />
                     ))}
                 </div>
             )}
 
-            <ButtonBar cancel={hide} />
+            <ButtonBar 
+                add={() => {
+                    createFlashcard(set, questionInput, answerInput).then(() => {
+                        refreshFlashcards();
+                        setQuestionInput(() => '');
+                        setAnswerInput(() => '');
+                    }); 
+                }}     
+                cancel={hide} 
+            />
         </>
     );
 }
