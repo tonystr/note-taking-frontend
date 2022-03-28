@@ -69,7 +69,7 @@ function TextArea({ noteId, data }) {
 }
 
 function TextEditor({ noteId }) {
-    const { data: note } = useApi<Note>(`notes/${noteId}`);
+    const { data: note } = useApi<Note>(noteId ? `notes/${noteId}` : null);
 
     console.log(note);
 
