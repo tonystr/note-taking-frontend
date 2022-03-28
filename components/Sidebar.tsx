@@ -1,8 +1,9 @@
 import FolderIcon from 'icons/folder.svg'
 import NotesIcon from 'icons/notes.svg'
-import { SetStateAction } from 'react'
+import moreIcon from 'icons/more.png';
+import { useEffect, useState } from 'react'
 import { Note } from 'types'
-import { create } from 'utils/api'
+import { create, apiDelete } from 'utils/api'
 
 function Button({ onClick, children, className='', ...props }) {
     return (
@@ -19,11 +20,38 @@ function Button({ onClick, children, className='', ...props }) {
     )
 }
 
-function NoteButton({ onClick, children, ...props }) {
+function MoreButton({ children, ...props }) {
     return (
-        <Button {...props} onClick={onClick}>
+        <div {...props} className='px-2 hover:bg-purple-4'>{children}</div>
+    );
+}
+
+function NoteButton({ deleteNote, onClick, children, ...props }) {
+    const [showMore, setShowMore] = useState(false);
+
+    useEffect(() => {
+        if (showMore) {
+            const hideMenu = () => setShowMore(() => false);
+            document.addEventListener('click', hideMenu);
+            return () => document.removeEventListener('click', hideMenu);
+        }
+    }, [showMore]);
+
+    return (
+        <Button {...props} className='group relative' onClick={onClick}>
             <FolderIcon className='mr-4 flex-shrink-0' />
             <span className='truncate'>{children}</span>
+            <div className='grow transition-paddig duration-100 group-hover:pr-[26px]' />
+            <button onClick={() => setShowMore(prev => !prev)} className='absolute inset-0 left-auto px-3 rounded-r-md transition-all duration-100 opacity-0 group-hover:opacity-100 hover:bg-purple-3'>
+                <img src={moreIcon.src} width={14} alt='' />
+            </button>
+            {showMore && (
+                <div className='absolute left-[100%] shadow-sm ml-1 top-0 bg-purple-5 border-[1px] border-purple-4 rounded-md py-1'>
+                    <MoreButton>Rename</MoreButton>
+                    <MoreButton>Move</MoreButton>
+                    <MoreButton onClick={() => deleteNote()}>Delete</MoreButton>
+                </div>
+            )}
         </Button>
     )
 }
@@ -32,6 +60,12 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
     const createNewNote = async () => {
         const note = await create('notes');
         setNoteId(() => note.id);
+        mutateNotes();
+    };
+
+    const deleteNote = () => {
+        console.log('Delete');
+        apiDelete(`notes/${noteId}`);
         mutateNotes();
     };
 
@@ -53,7 +87,9 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
                 <span className="ml-8">Create new note</span>
             </Button>
             {notes ? notes.map(note => (
-                <NoteButton onClick={() => setNoteId(() => note.id)} key={note.id}>{note.noteData.header}</NoteButton>
+                <NoteButton deleteNote={deleteNote} onClick={() => setNoteId(() => note.id)} key={note.id}>
+                    {note.noteData.header}
+                </NoteButton>
             )) : null}
             <div className="grow" />
             <div className="select-none bg-purple-4 px-auto py-2 px-1 flex flex-col items-center">

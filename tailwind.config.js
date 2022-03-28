@@ -56,7 +56,9 @@ module.exports = {
         }
     },
     variants: {
-        extend: {}
+        extend: {
+            visibility: ['group-hover']
+        }
     },
     plugins: [
         plugin(function ({ addUtilities }) {

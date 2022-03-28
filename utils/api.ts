@@ -30,8 +30,21 @@ async function create(path: RequestInfo, options?: {}) {
         .catch(console.error);
 }
 
+async function apiDelete(path: RequestInfo, options?: {}) {
+    return fetch(`/api/${path}`, {
+        method: 'DELETE',
+        body: JSON.stringify(options),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(res => res.json())
+        .catch(console.error);
+}
+
 async function fetcher(url: RequestInfo) {
     return fetch(`/api/${url}`).then(res => res.json());
 }
 
-export { useApi, update, create, fetcher };
+export { useApi, update, create, apiDelete, fetcher };
