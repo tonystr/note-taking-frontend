@@ -1,27 +1,38 @@
 import { useState, useRef, useEffect } from 'react';
 import { useApi, update } from 'utils/api';
 import { Note } from 'types';
+import useAutoSave from 'utils/useAutoSave';
 
-// Time to wait after keyboard input before autosaving
-const AUTOSAVE_TIME = 3000;
-
-function MetaInfo({ title, date }) {
-    //const [title, setTitle] = useState('Untitled note');
+function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
+    const [title, setTitle] = useState(titleSource);
+    const [date, setDate] = useState(dateSource);
     const dateStr = date.toISOString().split('T')[0];
+    const autosaveTitle = useAutoSave((header: String) => 
+        update(`notes/${noteId}`, { header }));
+    const autosaveDate = useAutoSave((updatedAt: Number) => 
+        update(`notes/${noteId}`, { updatedAt }));
 
     return (
         <div className='border-solid border-b-[1px] border-dark-5 flex justify-around items-baseline'>
             <input
                 className='text-dark-2 px-4 inline grow text-2xl outline-none selection:bg-purple-1 selection:text-white'
                 value={title}
-                onChange={null /*e => setTitle(() => e.target.value)*/}
+                onChange={e => {
+                    const newTitle = e.target.value;
+                    setTitle(() => newTitle);
+                    autosaveTitle(newTitle); 
+                }}
             />
             <div className='text-dark-3 inline-block w-32 h-9 translate-y-2 text-xl text-center relative focus-within:bg-purple-1 focus-within:text-white rounded'>
                 <input
                     className='cursor-pointer absolute grow inset-0 opacity-0'
                     type='date'
                     value={dateStr}
-                    onChange={null /*e => setDate(() => e.target.value)*/}
+                    onChange={e => { 
+                        const newDate = new Date(e.target.value);
+                        setDate(() => newDate); 
+                        autosaveDate(+newDate); 
+                    }}
                 />
                 <div className='absolute inset-0 pointer-events-none'>
                     {dateStr.slice(8, 10)}.{dateStr.slice(5, 7)}.{dateStr.slice(0, 4)}
@@ -33,27 +44,12 @@ function MetaInfo({ title, date }) {
 
 function TextArea({ noteId, data }) {
     const [text, setText] = useState(() => data);
-    const autosaveTimer = useRef<NodeJS.Timeout>();
+    const autosave = useAutoSave((details: String) => 
+        update(`notes/${noteId}`, { details }));
 
     useEffect(() => {
         setText(() => text);
     }, [data]);
-
-    const autosave = () => {
-        // Reset timer if user is writing
-        if (autosaveTimer.current !== null) {
-            clearTimeout(autosaveTimer.current);
-            autosaveTimer.current = null;
-        }
-
-        // Set new timer from now
-        autosaveTimer.current = setTimeout(() => {
-            update(`notes/${noteId}`, { details: text })
-
-            // Clear timer
-            autosaveTimer.current = null;
-        }, AUTOSAVE_TIME);
-    };
 
     return (
         <textarea
@@ -61,7 +57,7 @@ function TextArea({ noteId, data }) {
             className='notes-scrollbar px-5 mt-5 grow resize-none outline-none selection:bg-purple-1 selection:text-white'
             onChange={e => {
                 setText(() => e.target.value);
-                autosave();
+                autosave(e.target.value);
             }}
             value={text}
         />
@@ -71,11 +67,10 @@ function TextArea({ noteId, data }) {
 function TextEditor({ noteId }) {
     const { data: note } = useApi<Note>(noteId ? `notes/${noteId}` : null);
 
-    console.log(note);
-
     return note ? (
         <div className='mt-12 mx-auto flex flex-col'>
             <MetaInfo 
+                noteId={noteId}
                 title={note.noteData.header}
                 date={new Date(note.updatedAt)}
             />
@@ -91,4 +86,4 @@ function TextEditor({ noteId }) {
     );
 }
 
-export default TextEditor
+export default TextEditor;
