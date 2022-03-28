@@ -1,6 +1,6 @@
-import FlashcardIcon from "/icons/Flashcard.svg"
-import QnAIcon from "/icons/Q&A.svg"
-import atCampusLogo from '/icons/atcampus_logo_black.png';
+import FlashcardIcon from "icons/Flashcard.svg"
+import QnAIcon from "icons/Q&A.svg"
+import atCampusLogo from 'icons/atcampus_logo_black.png';
 
 function CreateButton({id, text, children, onClick }) {
     return (

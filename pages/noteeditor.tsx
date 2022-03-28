@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import Toolbar from '/components/Toolbar';
-import Sidebar from '/components/Sidebar';
-import TextEditor from '/components/TextEditor';
-import SideTool from '/components/SideTool'
-import { useNotes } from '/hooks/api';
+import Toolbar from 'components/Toolbar';
+import Sidebar from 'components/Sidebar';
+import TextEditor from 'components/TextEditor';
+import SideTool from 'components/SideTool'
+import { useNotes } from 'hooks/api';
 
 function NoteEditor() {
     const [sideTool, setSideTool] = useState<string>(null);

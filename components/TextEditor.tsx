@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNote, setNoteText } from '/hooks/api';
+import { useNote, setNoteText } from 'hooks/api';
 
 // Time to wait after keyboard input before autosaving
 const AUTOSAVE_TIME = 3000;
