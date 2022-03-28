@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { setNoteText } from 'hooks/api';
-import { useApi } from 'utils/api';
+import { useApi, update } from 'utils/api';
 import { Note } from 'types';
 
 // Time to wait after keyboard input before autosaving
@@ -49,8 +48,7 @@ function TextArea({ noteId, data }) {
 
         // Set new timer from now
         autosaveTimer.current = setTimeout(() => {
-            setNoteText(noteId, text)
-                .then(() => console.log('Updated note text'));
+            update(`notes/${noteId}`, { details: text })
 
             // Clear timer
             autosaveTimer.current = null;
