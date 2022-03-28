@@ -16,5 +16,21 @@ export interface FlashcardInput {
 export interface Flashcard extends FlashcardInput {
     id: string;
 }
+
+export interface RefreshApiCall extends Function {
+
+};
+
+export interface NoteData {
+    header: string;
+    details: string;
+}
   
+export interface Note {
+    id: string;
+    createdBy?: string;
+    createdAt: number;
+    updatedAt: number;
+    noteData: NoteData;
+}
   

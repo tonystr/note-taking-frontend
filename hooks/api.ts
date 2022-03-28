@@ -1,24 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Question, Flashcard } from 'types';
+import { Note, Question, Flashcard, FlashcardInput, RefreshApiCall } from 'types';
 
 // Note
 
-/*
-export interface INoteData {
-    header: string;
-    details: string;
-  }
-  
-  export interface INotes {
-    id: string;
-    createdBy?: string;
-    createdAt: number;
-    updatedAt: number;
-    noteData: INoteData;
-  }
-*/
-
-function useNotes() {
+function useNotes(): [Note[], RefreshApiCall] {
     const [notes, setNotes] = useState([]);
 
     const refreshNotes = () => {
@@ -33,20 +18,7 @@ function useNotes() {
     return [notes, refreshNotes];
 }
 
-async function setNoteText(noteId, text) {
-    return fetch(`/api/notes/${noteId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ details: text }),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-    })
-        .then(res => res.json())
-        .catch(console.error);
-}
-
-function useNote(noteId: String) {
+function useNote(noteId: String): [Note, RefreshApiCall] {
     const [note, setNote] = useState(null);
 
     const refreshNote = () => {
@@ -61,9 +33,22 @@ function useNote(noteId: String) {
     return [note, refreshNote];
 }
 
+async function setNoteText(noteId: String, text: String) {
+    return fetch(`/api/notes/${noteId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ details: text }),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+    })
+        .then(res => res.json())
+        .catch(console.error);
+}
+
 // Flashcards
 
-function useFlashcards(): [ Flashcard[], Function ] {
+function useFlashcards(): [ Flashcard[], RefreshApiCall ] {
     const [flashcards, setFlashcards] = useState([]);
 
     const refreshFlashcards = () => {
@@ -79,10 +64,10 @@ function useFlashcards(): [ Flashcard[], Function ] {
 }
 
 // header: flashcard gruppe
-async function createFlashcard(header, front, back) {
+async function createFlashcard(flashcard: FlashcardInput) {
     return fetch('/api/flashcards', {
         method: 'POST',
-        body: JSON.stringify({ header, front, back }),
+        body: JSON.stringify(flashcard),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -95,7 +80,7 @@ async function createFlashcard(header, front, back) {
 
 // QnA questions
 
-function useQuestions(): [Question[], Function] {
+function useQuestions(): [Question[], RefreshApiCall] {
     const [questions, setQuestions]: [Question[], Function] = useState([]);
 
     const refreshQuestions = () => {

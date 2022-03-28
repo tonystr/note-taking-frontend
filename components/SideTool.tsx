@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useFlashcards, createFlashcard, useQuestions, createQuestion } from 'hooks/api'
+import { FlashcardInput } from 'types';
 
-function FlashcardPreview({ front, back }) {
+function FlashcardPreview({ front, back }: { front: String, back?: String }) {
     return (
         <div className="m-2 px-2 py-1 rounded-md hover:bg-purple-4 border-0 border-blue300">
-            <p className=" text-sm "> {front}</p>
+            <p className=" text-sm ">{front}</p>
             <p className="text-xs text-dark-3">{back}</p>
         </div>
     );
@@ -134,7 +135,12 @@ function FlashcardTool({ groups, hide }) {
 
             <ButtonBar 
                 add={() => {
-                    createFlashcard(set, questionInput, answerInput).then(() => {
+                    const flashcard: FlashcardInput = {
+                        header: set,
+                        front: questionInput,
+                        back: answerInput
+                    };
+                    createFlashcard(flashcard).then(() => {
                         refreshFlashcards();
                         setQuestionInput(() => '');
                         setAnswerInput(() => '');
