@@ -26,7 +26,7 @@ function MoreButton({ children, ...props }) {
     );
 }
 
-function NoteButton({ deleteNote, onClick, children, ...props }) {
+function NoteButton({ deleteNote, onClick, children, selected, ...props }) {
     const [showMore, setShowMore] = useState(false);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ function NoteButton({ deleteNote, onClick, children, ...props }) {
     }, [showMore]);
 
     return (
-        <Button {...props} className='group relative' onClick={onClick}>
+        <Button {...props} className={`group relative ${selected ? 'bg-purple-4' : ''}`} onClick={onClick}>
             <FolderIcon className='mr-4 flex-shrink-0' />
             <span className='truncate'>{children}</span>
             <div className='grow transition-paddig duration-100 group-hover:pr-[26px]' />
@@ -58,15 +58,14 @@ function NoteButton({ deleteNote, onClick, children, ...props }) {
 
 function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mutateNotes: Function, noteId: String, setNoteId: Function }) {
     const createNewNote = async () => {
-        const note = await create('notes');
+        const note = await create('notes', { header: '', details: '' });
         setNoteId(() => note.id);
         mutateNotes();
     };
 
     const deleteNote = () => {
-        console.log('Delete');
-        apiDelete(`notes/${noteId}`);
-        mutateNotes();
+        apiDelete(`notes/${noteId}`)
+            .then(() => mutateNotes());
     };
 
     return (
@@ -87,8 +86,13 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
                 <span className="ml-8">Create new note</span>
             </Button>
             {notes ? notes.map(note => (
-                <NoteButton deleteNote={deleteNote} onClick={() => setNoteId(() => note.id)} key={note.id}>
-                    {note.noteData.header}
+                <NoteButton 
+                    deleteNote={deleteNote} 
+                    onClick={() => setNoteId(() => note.id)} 
+                    selected={note.id === noteId}
+                    key={note.id}
+                >
+                    {note.header}
                 </NoteButton>
             )) : null}
             <div className="grow" />

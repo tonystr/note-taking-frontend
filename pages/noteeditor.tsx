@@ -9,17 +9,39 @@ import SideTool from 'components/SideTool'
 function NoteEditor() {
     const [noteId, setNoteId] = useState<string>(null);
     const [sideTool, setSideTool] = useState<string>(null);
+    const { data: sets, mutate: mutateSets } = useApi<any[]>('flashcardsSet') || { data: [], mutate: () => {} };
     const { data: notes, mutate: mutateNotes, isValidating } = useApi<Note[]>('notes');
+
+    // Generate flashcard sets if none exist
+    useEffect(() => {
+        if (Array.isArray(sets) && sets.length === 0) {
+            const createFlashcardSet = (name) => {
+                return fetch('/api/flashcardsSet', {
+                    method: 'POST',
+                    body: JSON.stringify({ name }),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                    .then(() => { mutateSets() });
+            };
+
+            createFlashcardSet('DATA2500 Operativsystemer');
+            createFlashcardSet('DATA2410 Datanettverk og skytjenester');
+            createFlashcardSet('DATA3100 Kunstlig intelligens');
+        }
+    }, [sets]);
 
     // Auto select first note upon fetch
     useEffect(() => {
-        if (!isValidating && noteId === null) {
+        if (notes && !isValidating && noteId === null) {
             setNoteId(notes[0]?.id);
         }
     }, [noteId, notes, isValidating]);
 
     return (
-        <div className='h-screen h-full flex flex-col'>
+        <div className='h-screen flex flex-col'>
             <Toolbar
                 viewFlashcardEditor={() => setSideTool(() => 'flashcard')}
                 viewQuestionEditoor={() => setSideTool(() => 'question')}

@@ -9,7 +9,7 @@ function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
     const dateStr = date.toISOString().split('T')[0];
     const autosaveTitle = useAutoSave((header: String) => 
         update(`notes/${noteId}`, { header }));
-    const autosaveDate = useAutoSave((updatedAt: Number) => 
+    const autosaveDate = useAutoSave((updatedAt: Date) => 
         update(`notes/${noteId}`, { updatedAt }));
         
     useEffect(() => {
@@ -23,8 +23,9 @@ function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
     return (
         <div className='border-solid border-b-[1px] border-dark-5 flex justify-around items-baseline'>
             <input
+                placeholder='Enter title here...'
                 className='text-dark-2 px-4 inline grow text-2xl outline-none selection:bg-purple-1 selection:text-white'
-                value={title}
+                value={title || ''}
                 onChange={e => {
                     const newTitle = e.target.value;
                     setTitle(() => newTitle);
@@ -39,7 +40,7 @@ function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
                     onChange={e => { 
                         const newDate = new Date(e.target.value);
                         setDate(() => newDate); 
-                        autosaveDate(+newDate); 
+                        autosaveDate(newDate); 
                     }}
                 />
                 <div className='absolute inset-0 pointer-events-none'>
@@ -67,7 +68,7 @@ function TextArea({ noteId, data }) {
                 setText(() => e.target.value);
                 autosave(e.target.value);
             }}
-            value={text}
+            value={text || ''}
         />
     );
 }
@@ -79,12 +80,12 @@ function TextEditor({ noteId }) {
         <div className='mt-12 mx-auto flex flex-col'>
             <MetaInfo 
                 noteId={noteId}
-                title={note.noteData.header}
+                title={note.header}
                 date={new Date(note.updatedAt)}
             />
             <TextArea 
                 noteId={noteId}
-                data={note.noteData.details}
+                data={note.details}
             />
         </div>
     ) : (

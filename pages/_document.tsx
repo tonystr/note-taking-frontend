@@ -10,7 +10,10 @@ class MyDocument extends Document {
     render(): ReactElement {
         return (
             <Html lang="en" className="h-full">
-                <Head />
+                <Head>
+                    <link rel="icon" href="/favicon.png" />
+                    <title>atcampus notes</title>
+                </Head>
                 <body className="h-full bg-white antialiased">
                     <Main />
                     <NextScript />

@@ -1,10 +1,17 @@
 
 export interface QuestionInput {
-    question: string;
+    data: string;
 }
   
 export interface Question extends QuestionInput {
     id: string;
+}
+
+export type FlashcardSet = {
+    id: string
+    name: string
+    createdAt: Date
+    updatedAt: Date
 }
 
 export interface FlashcardInput {
@@ -17,10 +24,6 @@ export interface Flashcard extends FlashcardInput {
     id: string;
 }
 
-export interface RefreshApiCall extends Function {
-
-};
-
 export interface NoteData {
     header: string;
     details: string;
@@ -28,9 +31,10 @@ export interface NoteData {
   
 export interface Note {
     id: string;
-    createdBy?: string;
-    createdAt: number;
-    updatedAt: number;
-    noteData: NoteData;
+    header: string;
+    details: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
-  
+
+export type NoteInput = Omit<Note, 'id' | 'createdAt' | 'updatedAt'>;
