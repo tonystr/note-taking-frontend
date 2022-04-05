@@ -20,9 +20,9 @@ function Button({ onClick, children, className='', ...props }) {
     )
 }
 
-function MoreButton({ children, ...props }) {
+function MoreButton({ children, className='', ...props }) {
     return (
-        <div {...props} className='px-2 hover:bg-purple-4'>{children}</div>
+        <div {...props} className={`px-2 hover:bg-purple-4 ${className}`}>{children}</div>
     );
 }
 
@@ -40,7 +40,7 @@ function NoteButton({ deleteNote, onClick, children, selected, ...props }) {
     return (
         <Button {...props} className={`group relative ${selected ? 'bg-purple-4' : ''}`} onClick={onClick}>
             <FolderIcon className='mr-4 flex-shrink-0' />
-            <span className='truncate'>{children}</span>
+            <span className='truncate'>{children || 'Untitled note'}</span>
             <div className='grow transition-paddig duration-100 group-hover:pr-[26px]' />
             <button onClick={() => setShowMore(prev => !prev)} className='absolute inset-0 left-auto px-3 rounded-r-md transition-all duration-100 opacity-0 group-hover:opacity-100 hover:bg-purple-3'>
                 <img src={moreIcon.src} width={14} alt='' />
@@ -49,7 +49,7 @@ function NoteButton({ deleteNote, onClick, children, selected, ...props }) {
                 <div className='absolute left-[100%] shadow-sm ml-1 top-0 bg-purple-5 border-[1px] border-purple-4 rounded-md py-1'>
                     <MoreButton>Rename</MoreButton>
                     <MoreButton>Move</MoreButton>
-                    <MoreButton onClick={() => deleteNote()}>Delete</MoreButton>
+                    <MoreButton onClick={() => deleteNote()} className='text-red-600'>Delete</MoreButton>
                 </div>
             )}
         </Button>

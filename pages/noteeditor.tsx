@@ -30,6 +30,7 @@ function NoteEditor() {
             createFlashcardSet('DATA2500 Operativsystemer');
             createFlashcardSet('DATA2410 Datanettverk og skytjenester');
             createFlashcardSet('DATA3100 Kunstlig intelligens');
+            createFlashcardSet('DATA3710 Praktisk IT-prosjekt');
         }
     }, [sets]);
 
