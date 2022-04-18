@@ -26,7 +26,7 @@ function InputField({id, type, text }) {
                 peer-focus:-top-3.5
                 peer-focus:text-sm
                 peer-focus:text-dark-1
-                ' for={id}
+                ' htmlFor={id}
                 >{text}</label>
                 <div className=" absolute z-1 pointer-events-none -top-0 -right-0 -left-0 -bottom-0 rounded opacity-0 border-b-4 border-form-border-active border-purple-1 peer-focus:opacity-100 "></div>
             </p>
