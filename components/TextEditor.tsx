@@ -1,16 +1,20 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useApi, update } from 'utils/api';
 import { Note } from 'types';
 import useAutoSave from 'utils/useAutoSave';
 
-function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
+function MetaInfo({ noteId, title: titleSource, mutateSidebar, date: dateSource }) {
     const [title, setTitle] = useState(titleSource);
     const [date, setDate] = useState(dateSource);
     const dateStr = date.toISOString().split('T')[0];
-    const autosaveTitle = useAutoSave((header: String) => 
-        update(`notes/${noteId}`, { header }));
-    const autosaveDate = useAutoSave((updatedAt: Date) => 
-        update(`notes/${noteId}`, { updatedAt }));
+    const autosaveTitle = useAutoSave((header: String) => {
+        update(`notes/${noteId}`, { header });
+        mutateSidebar();
+    }, 1000, 400);
+    const autosaveDate = useAutoSave((updatedAt: Date) => {
+        update(`notes/${noteId}`, { updatedAt });
+        mutateSidebar();
+    });
         
     useEffect(() => {
         setTitle(() => titleSource);
@@ -73,7 +77,7 @@ function TextArea({ noteId, data }) {
     );
 }
 
-function TextEditor({ noteId }) {
+function TextEditor({ noteId, mutateSidebar }) {
     const { data: note } = useApi<Note>(noteId ? `notes/${noteId}` : null);
 
     return note ? (
@@ -81,6 +85,7 @@ function TextEditor({ noteId }) {
             <MetaInfo 
                 noteId={noteId}
                 title={note.header}
+                mutateSidebar={mutateSidebar}
                 date={new Date(note.updatedAt)}
             />
             <TextArea 

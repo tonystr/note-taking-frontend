@@ -1,25 +1,38 @@
 import { useRef } from 'react';
 
-// Time to wait after keyboard input before autosaving
-const AUTOSAVE_TIME = 3000;
+const POST_AUTOSAVE_TIME = 1000; // Time to wait after keyboard input before autosaving (ms)
+const PERI_AUTOSAVE_TIME = 5000; // Time between each autosave during input
 
-export default function useAutoSave(callBack: Function) {
-    const autosaveTimer = useRef<NodeJS.Timeout>();
+// Returns an autosave() function which autosaves both on an interval (peri) and after
+// inputting stops (post). autosave() should be called every time input changes. 
+export default function useAutoSave(callBack: Function, postTime=POST_AUTOSAVE_TIME, periTime=PERI_AUTOSAVE_TIME) {
+    const postAutosaveTimer = useRef<NodeJS.Timeout>(null);
+    const periAutosaveTimer = useRef<NodeJS.Timeout>(null);
+    const periArgs = useRef<any[]>();
     
     const autosave = (...args) => {
-        // Reset timer if user is writing
-        if (autosaveTimer.current !== null) {
-            clearTimeout(autosaveTimer.current);
-            autosaveTimer.current = null;
+        periArgs.current = args;
+
+        if (periAutosaveTimer.current === null) {
+            periAutosaveTimer.current = setTimeout(() => {
+                callBack(...periArgs.current);
+                periAutosaveTimer.current = null;
+            }, periTime);
         }
 
-        // Set new timer from now
-        autosaveTimer.current = setTimeout(() => {
+        // Reset post-input timer if user is writing
+        if (postAutosaveTimer.current !== null) {
+            clearTimeout(postAutosaveTimer.current);
+            postAutosaveTimer.current = null;
+        }
+
+        // Set new post-input timer from now
+        postAutosaveTimer.current = setTimeout(() => {
             callBack(...args);
 
             // Clear timer
-            autosaveTimer.current = null;
-        }, AUTOSAVE_TIME);
+            postAutosaveTimer.current = null;
+        }, postTime);
     };
 
     return autosave;

@@ -49,7 +49,7 @@ function NoteEditor() {
             />
             <div className="flex h-full">
                 <Sidebar notes={notes} mutateNotes={mutateNotes} noteId={noteId} setNoteId={setNoteId} />
-                {noteId !== null ? <TextEditor noteId={noteId} /> : 'No note selected :)'}
+                {noteId !== null ? <TextEditor noteId={noteId} mutateSidebar={mutateNotes} /> : 'No note selected :)'}
                 <SideTool
                     visible={sideTool !== null}
                     tool={sideTool}

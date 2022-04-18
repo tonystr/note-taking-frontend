@@ -56,6 +56,12 @@ function NoteButton({ deleteNote, onClick, children, selected, ...props }) {
     )
 }
 
+function compareNotes(a, b) {
+    const ad = new Date(a.updatedAt ? a.updatedAt : a.createdAt); 
+    const bd = new Date(b.updatedAt ? b.updatedAt : b.createdAt);
+    return +ad - +bd;
+}
+
 function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mutateNotes: Function, noteId: String, setNoteId: Function }) {
     const createNewNote = async () => {
         const note = await create('notes', { header: '', details: '' });
@@ -67,6 +73,8 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
         apiDelete(`notes/${noteId}`)
             .then(() => mutateNotes());
     };
+    
+    console.log(notes && notes.slice().sort(compareNotes));
 
     return (
         <div className='flex flex-col text-dark-1 h-full w-64 bg-purple-5 border-solid border-r-[1px] border-dark-6'>
@@ -85,7 +93,7 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
                 <span className="text-xl font-thin absolute top-0">+</span>
                 <span className="ml-8">Create new note</span>
             </Button>
-            {notes ? notes.map(note => (
+            {notes ? notes.slice().sort(compareNotes).map(note => (
                 <NoteButton 
                     deleteNote={deleteNote} 
                     onClick={() => setNoteId(() => note.id)} 
