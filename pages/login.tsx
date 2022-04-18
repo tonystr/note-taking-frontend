@@ -26,7 +26,7 @@ function InputField({id, type, text }) {
                 transition-all              
                 peer-placeholder-shown:text-md
                 peer-placeholder-shown:text-gray-500
-                peer-placeholder-shown:-top-[2px]
+                peer-placeholder-shown:-top-[3px]
                 peer-placeholder-shown:left-4
                 peer-focus:-top-4
                 peer-focus:left-2
@@ -39,6 +39,72 @@ function InputField({id, type, text }) {
         </div>
     );
 }
+
+function LoginForm({}) {
+ return (
+    <form className='w-9/12 m-auto p-2 '>
+        <InputField id="username" type="text" text="Username"/>
+        <InputField id="password" type="password" text="Password"/>
+
+        <button className='
+        w-full py-3 my-4 select-none
+        text-white font-bold
+        bg-purple-1 rounded-standard
+        focus:ring-purple-1 
+        focus:ring-offset-1 
+        focus:ring-2 
+        hover:shadow-md 
+        hover:shadow-purple-2/50'>
+            Logg inn
+        </button>
+
+        <p id='loginErrorMessage' 
+            className=' before:content-["*"] after:content-["*"]
+            text-red-500 text-left hidden'>
+            Innlogging feilet
+        </p>
+
+        <p>Har du ikke bruker? <span className='text-purple-1 hover:underline cursor-pointer'>Registrer deg her!</span></p>
+
+        
+    </form>
+
+ );
+}
+
+function RegisterForm({}) {
+    return (
+       <form className='w-9/12 m-auto p-2 '>
+           <InputField id="username" type="text" text="Create a username"/>
+           <InputField id="password" type="password" text="Choose a secure password"/>
+   
+           <button className='
+           w-full py-3 my-4 select-none
+           text-white font-bold
+           bg-purple-1 rounded-standard
+           focus:ring-purple-1 
+           focus:ring-offset-1 
+           focus:ring-2 
+           hover:shadow-md 
+           hover:shadow-purple-2/50'>
+               Registrer deg
+           </button>
+   
+           <p id='loginErrorMessage' 
+               className=' before:content-["*"] after:content-["*"]
+               text-red-500 text-left hidden'>
+               Registrering feilet
+            </p>
+
+           <p>Har du allerede bruker? <span className='text-purple-1 hover:underline cursor-pointer'>Logg inn her!</span></p>
+   
+           
+       </form>
+   
+    );
+   }
+
+
 
 function LoginPage() {
     return (
@@ -55,26 +121,12 @@ function LoginPage() {
                 <h1 className='font-bold text-[45px] text-dark-1'>Kom i gang!</h1>
                 <span className='text-sm'>Av studenter. For studenter. For en gangs skyld.</span>
 
-                <form className='w-9/12 m-auto p-2 '>
-                    <InputField id="username" type="text" text="Username"/>
-                    <InputField id="password" type="password" text="Password"/>
+                <LoginForm />
+                <p className='text-red-500'>**Viser begge komponentene her kun for demonstrasjon**</p>
+                <RegisterForm />
+                
 
-                    <button className='
-                    w-full py-3 my-4 select-none
-                    text-white font-bold
-                    bg-purple-1 rounded-standard
-                    focus:ring-purple-1 
-                    focus:ring-offset-1 
-                    focus:ring-2 
-                    hover:shadow-md 
-                    hover:shadow-purple-2/50'>
-                        Logg inn
-                    </button>
-                    <p id='loginErrorMessage' 
-                        className=' before:content-["*"] after:content-["*"]
-                        text-red-500 text-left'>
-                        Innlogging feilet</p>
-                </form>
+                
             </div>
 
             {/* Footer image */}
