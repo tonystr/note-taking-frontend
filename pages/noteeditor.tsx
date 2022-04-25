@@ -37,6 +37,7 @@ function NoteEditor() {
     // Auto select first note upon fetch
     useEffect(() => {
         if (notes && !isValidating && noteId === null) {
+            console.log(notes);
             setNoteId(notes[0]?.id);
         }
     }, [noteId, notes, isValidating]);

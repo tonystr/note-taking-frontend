@@ -1,23 +1,29 @@
 import { useState } from 'react';
 import atCampusLogo from 'icons/atCampus-Logo-bg-purple-5.jpg';
 import LoginFooter from 'icons/LoginFooter.jpg';
+import { create } from 'utils/api';
 
-
-function InputField({id, type, text }) {
+function InputField({ onChange, value, id, type, text }) {
     return (
         <div className='relativering-1'>
             
             {/* Input */}
-            <p className='relative'>
+            <div className='relative'>
                 <input
-                className='
-                block w-full h-full p-2 pt-5 mt-4
-                outline-none ring-1 ring-gray-300 
-                focus:bg-transparent 
-                focus:ring-purple-1
-                placeholder-transparent select-none
-                shadow-sm rounded peer'
-                type={type} placeholder={text} id={id} required />
+                    className='
+                        block w-full h-full p-2 pt-5 mt-4
+                        outline-none ring-1 ring-gray-300 
+                        focus:bg-transparent 
+                        focus:ring-purple-1
+                        placeholder-transparent select-none
+                        shadow-sm rounded peer'
+                    type={type}
+                    placeholder={text}
+                    id={id}
+                    value={value}
+                    onChange={e => onChange(e.target.value)}
+                    required
+                />
                 
                 {/* Label */}
                 <label className='
@@ -36,67 +42,78 @@ function InputField({id, type, text }) {
                 ' htmlFor={id}
                 >{text}</label>
                 <div className=" absolute z-1 pointer-events-none -top-0 -right-0 -left-0 -bottom-0 rounded opacity-0 border-b-4 border-form-border-active border-purple-1 peer-focus:opacity-100 "></div>
-            </p>
+            </div>
         </div>
     );
 }
 
 function LoginForm({ setError, toggleRegisterForm }) {
- return (
-    <form className='w-9/12 m-auto p-2 '>
-        <InputField id="username" type="text" text="Username"/>
-        <InputField id="password" type="password" text="Password"/>
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-        <button className='
-        w-full py-3 my-4 select-none
-        text-white font-bold
-        bg-purple-1 rounded-standard
-        focus:ring-purple-1 
-        focus:ring-offset-1 
-        focus:ring-2 
-        hover:shadow-md 
-        hover:shadow-purple-2/50'>
-            Logg inn
-        </button>
+    return (
+        <div className='w-9/12 m-auto p-2 '>
+            <InputField onChange={setUsername} value={username} id="username" type="text" text="Username"/>
+            <InputField onChange={setPassword} value={password} id="password" type="password" text="Password"/>
 
-        <p id='loginErrorMessage' 
-            className=' before:content-["*"] after:content-["*"]
-            text-red-500 text-left hidden'>
-            Innlogging feilet
-        </p>
+            <button className='
+            w-full py-3 my-4 select-none
+            text-white font-bold
+            bg-purple-1 rounded-standard
+            focus:ring-purple-1 
+            focus:ring-offset-1 
+            focus:ring-2 
+            hover:shadow-md 
+            hover:shadow-purple-2/50' onClick={() => create('peder-auth/login', { username, password }).then(console.log)}>
+                Logg inn
+            </button>
 
-        <p>
-            Har du ikke bruker? <a 
-                href='javascript:void (0);'  
-                className='text-purple-1 hover:underline cursor-pointer'
-                onClick={toggleRegisterForm}
-            >
-                Registrer deg her!
-            </a>
-        </p>
-    </form>
+            <p id='loginErrorMessage' 
+                className=' before:content-["*"] after:content-["*"]
+                text-red-500 text-left hidden'>
+                Innlogging feilet
+            </p>
 
- );
+            <p>
+                Har du ikke bruker? <span 
+                    href='javascript:void (0);'  
+                    className='text-purple-1 hover:underline cursor-pointer'
+                    onClick={toggleRegisterForm}
+                >
+                    Registrer deg her!
+                </span>
+            </p>
+
+            <a href='/'>home</a>
+        </div>
+    );
 }
 
 function RegisterForm({ setError, toggleLoginForm }) {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
+
     return (
-       <form className='w-9/12 m-auto p-2 '>
-           <InputField id="username" type="text" text="Create a username"/>
-           <InputField id="password" type="password" text="Choose a secure password"/>
-           <InputField id="password2" type="password" text="Choose a secure password"/>
-   
-           <button className='
-           w-full py-3 my-4 select-none
-           text-white font-bold
-           bg-purple-1 rounded-standard
-           focus:ring-purple-1 
-           focus:ring-offset-1 
-           focus:ring-2 
-           hover:shadow-md 
-           hover:shadow-purple-2/50'>
-               Registrer deg
-           </button>
+       <div className='w-9/12 m-auto p-2 ' onSubmit={() => false}>
+            <InputField onChange={setUsername} value={username} id="username" type="text" text="Create a username"/>
+            <InputField onChange={setPassword} value={password} id="password" type="password" text="Choose a secure password"/>
+            <InputField onChange={setPassword2} value={password2} id="password2" type="password" text="Choose a secure password"/>
+    
+            <button 
+                className='
+                    w-full py-3 my-4 select-none
+                    text-white font-bold
+                    bg-purple-1 rounded-standard
+                    focus:ring-purple-1 
+                    focus:ring-offset-1 
+                    focus:ring-2 
+                    hover:shadow-md 
+                    hover:shadow-purple-2/50'
+                onClick={() => create('peder-auth/user', { username, password }).then(console.log)}
+            >
+                Registrer deg
+            </button>
    
             <p id='loginErrorMessage' 
                className=' before:content-["*"] after:content-["*"]
@@ -105,17 +122,17 @@ function RegisterForm({ setError, toggleLoginForm }) {
             </p>
 
             <p>
-                Har du allerede bruker? <a 
+                Har du allerede bruker? <span 
                     href='javascript:void (0);'  
                     className='text-purple-1 hover:underline cursor-pointer'
                     onClick={toggleLoginForm}
                 >
                     Logg inn her!
-                </a>
+                </span>
             </p>
    
            
-       </form>
+       </div>
    
     );
    }

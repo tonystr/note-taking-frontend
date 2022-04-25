@@ -6,7 +6,7 @@ import useAutoSave from 'utils/useAutoSave';
 function MetaInfo({ noteId, title: titleSource, date: dateSource }) {
     const [title, setTitle] = useState(titleSource);
     const [date, setDate] = useState(dateSource);
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = new Date().toISOString().split('T')[0]; //date.toISOString().split('T')[0];
     const autosaveTitle = useAutoSave((header: String) => 
         update(`notes/${noteId}`, { header }));
     const autosaveDate = useAutoSave((updatedAt: Date) => 
