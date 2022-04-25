@@ -83,7 +83,7 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
     return (
         <div className='flex flex-col text-dark-1 h-full w-64 bg-purple-5 border-solid border-r-[1px] border-dark-6'>
             <div className='select-none fill-white py-3 px-4 bg-purple-1 text-white flex justify-between cursor-pointer'>
-                <div>
+                <div className='truncate'>
                     <NotesIcon className='inline mr-4' />
                     Study notes
                 </div>
@@ -95,7 +95,7 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
             </div>
             <Button onClick={() => createNewNote()} className="relative mb-4 mt-1">
                 <span className="text-xl font-thin absolute top-0">+</span>
-                <span className="ml-8">Create new note</span>
+                <span className="ml-8 truncate">Create new note</span>
             </Button>
             {notes ? notes.map(note => (
                 <NoteButton 
