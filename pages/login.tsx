@@ -76,7 +76,6 @@ function LoginForm({ setError, toggleRegisterForm }) {
 
             <p>
                 Har du ikke bruker? <span 
-                    href='javascript:void (0);'  
                     className='text-purple-1 hover:underline cursor-pointer'
                     onClick={toggleRegisterForm}
                 >
@@ -123,7 +122,6 @@ function RegisterForm({ setError, toggleLoginForm }) {
 
             <p>
                 Har du allerede bruker? <span 
-                    href='javascript:void (0);'  
                     className='text-purple-1 hover:underline cursor-pointer'
                     onClick={toggleLoginForm}
                 >
