@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import atCampusLogo from 'icons/atCampus-Logo-bg-purple-5.jpg';
+import { useRouter } from 'next/router';
 import LoginFooter from 'icons/LoginFooter.jpg';
 import { create } from 'utils/api';
 
@@ -50,29 +51,34 @@ function InputField({ onChange, value, id, type, text }) {
 function LoginForm({ setError, toggleRegisterForm }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
     return (
         <div className='w-9/12 m-auto p-2 '>
             <InputField onChange={setUsername} value={username} id="username" type="text" text="Username"/>
             <InputField onChange={setPassword} value={password} id="password" type="password" text="Password"/>
 
-            <button className='
-            w-full py-3 my-4 select-none
-            text-white font-bold
-            bg-purple-1 rounded-standard
-            focus:ring-purple-1 
-            focus:ring-offset-1 
-            focus:ring-2 
-            hover:shadow-md 
-            hover:shadow-purple-2/50' onClick={() => create('peder-auth/login', { username, password }).then(console.log)}>
+            <button 
+                className='
+                    w-full py-3 my-4 select-none
+                    text-white font-bold
+                    bg-purple-1 rounded-standard
+                    focus:ring-purple-1 
+                    focus:ring-offset-1 
+                    focus:ring-2 
+                    hover:shadow-md 
+                    hover:shadow-purple-2/50' 
+
+                onClick={() => create('peder-auth/login', { username, password }).then(res => {
+                    if (res.success) {
+                        router.push({ pathname: '/' });
+                    } else if (res.message === 'Not Found') {
+                        setError(() => 'Username or password is wrong. Please try again');
+                    }
+                })}
+            >
                 Logg inn
             </button>
-
-            <p id='loginErrorMessage' 
-                className=' before:content-["*"] after:content-["*"]
-                text-red-500 text-left hidden'>
-                Innlogging feilet
-            </p>
 
             <p>
                 Har du ikke bruker? <span 
@@ -82,8 +88,6 @@ function LoginForm({ setError, toggleRegisterForm }) {
                     Registrer deg her!
                 </span>
             </p>
-
-            <a href='/'>home</a>
         </div>
     );
 }
@@ -92,12 +96,13 @@ function RegisterForm({ setError, toggleLoginForm }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const router = useRouter();
 
     return (
        <div className='w-9/12 m-auto p-2 ' onSubmit={() => false}>
             <InputField onChange={setUsername} value={username} id="username" type="text" text="Create a username"/>
             <InputField onChange={setPassword} value={password} id="password" type="password" text="Choose a secure password"/>
-            <InputField onChange={setPassword2} value={password2} id="password2" type="password" text="Choose a secure password"/>
+            <InputField onChange={setPassword2} value={password2} id="password2" type="password" text="Type your password again"/>
     
             <button 
                 className='
@@ -109,16 +114,24 @@ function RegisterForm({ setError, toggleLoginForm }) {
                     focus:ring-2 
                     hover:shadow-md 
                     hover:shadow-purple-2/50'
-                onClick={() => create('peder-auth/user', { username, password }).then(console.log)}
+
+                onClick={() => {
+                    if (password !== password2) {
+                        setError(() => 'Passwords do not match');
+                        return;
+                    }
+
+                    create('peder-auth/user', { username, password }).then(() => {
+                        create('peder-auth/login', { username, password }).then(res => {
+                            if (res.success) {
+                                router.push({ pathname: '/' });
+                            }
+                        })
+                    })
+                }}
             >
                 Registrer deg
             </button>
-   
-            <p id='loginErrorMessage' 
-               className=' before:content-["*"] after:content-["*"]
-               text-red-500 text-left hidden'>
-               Registrering feilet
-            </p>
 
             <p>
                 Har du allerede bruker? <span 
@@ -128,12 +141,9 @@ function RegisterForm({ setError, toggleLoginForm }) {
                     Logg inn her!
                 </span>
             </p>
-   
-           
        </div>
-   
     );
-   }
+}
 
 
 
