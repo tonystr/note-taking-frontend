@@ -84,7 +84,7 @@ function RegisterForm({ setError, toggleLoginForm }) {
        <form className='w-9/12 m-auto p-2 '>
            <InputField id="username" type="text" text="Create a username"/>
            <InputField id="password" type="password" text="Choose a secure password"/>
-           <InputField id="password2" type="password" text="Type your password again"/>
+           <InputField id="password2" type="password" text="Choose a secure password"/>
    
            <button className='
            w-full py-3 my-4 select-none
