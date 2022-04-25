@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import atCampusLogo from 'icons/atCampus-Logo-bg-purple-5.jpg';
 import LoginFooter from 'icons/LoginFooter.jpg';
 
@@ -40,7 +41,7 @@ function InputField({id, type, text }) {
     );
 }
 
-function LoginForm({}) {
+function LoginForm({ setError, toggleRegisterForm }) {
  return (
     <form className='w-9/12 m-auto p-2 '>
         <InputField id="username" type="text" text="Username"/>
@@ -64,19 +65,26 @@ function LoginForm({}) {
             Innlogging feilet
         </p>
 
-        <p>Har du ikke bruker? <span className='text-purple-1 hover:underline cursor-pointer'>Registrer deg her!</span></p>
-
-        
+        <p>
+            Har du ikke bruker? <a 
+                href='javascript:void (0);'  
+                className='text-purple-1 hover:underline cursor-pointer'
+                onClick={toggleRegisterForm}
+            >
+                Registrer deg her!
+            </a>
+        </p>
     </form>
 
  );
 }
 
-function RegisterForm({}) {
+function RegisterForm({ setError, toggleLoginForm }) {
     return (
        <form className='w-9/12 m-auto p-2 '>
            <InputField id="username" type="text" text="Create a username"/>
            <InputField id="password" type="password" text="Choose a secure password"/>
+           <InputField id="password2" type="password" text="Type your password again"/>
    
            <button className='
            w-full py-3 my-4 select-none
@@ -90,13 +98,21 @@ function RegisterForm({}) {
                Registrer deg
            </button>
    
-           <p id='loginErrorMessage' 
+            <p id='loginErrorMessage' 
                className=' before:content-["*"] after:content-["*"]
                text-red-500 text-left hidden'>
                Registrering feilet
             </p>
 
-           <p>Har du allerede bruker? <span className='text-purple-1 hover:underline cursor-pointer'>Logg inn her!</span></p>
+            <p>
+                Har du allerede bruker? <a 
+                    href='javascript:void (0);'  
+                    className='text-purple-1 hover:underline cursor-pointer'
+                    onClick={toggleLoginForm}
+                >
+                    Logg inn her!
+                </a>
+            </p>
    
            
        </form>
@@ -107,6 +123,9 @@ function RegisterForm({}) {
 
 
 function LoginPage() {
+    const [error, setError] = useState(null);
+    const [showLogin, setShowLogin] = useState(true);
+
     return (
         <div className=" w-full bg-[#F8F8FF]">
             <div >
@@ -121,12 +140,11 @@ function LoginPage() {
                 <h1 className='font-bold text-[45px] text-dark-1'>Kom i gang!</h1>
                 <span className='text-sm'>Av studenter. For studenter. For en gangs skyld.</span>
 
-                <LoginForm />
-                <p className='text-red-500'>**Viser begge komponentene her kun for demonstrasjon**</p>
-                <RegisterForm />
-                
+                {showLogin ? 
+                    <LoginForm toggleRegisterForm={() => setShowLogin(() => false)} setError={setError} /> :
+                    <RegisterForm toggleLoginForm={() => setShowLogin(() => true)} setError={setError} />}
 
-                
+                {error ? <p className='text-red-500'>{error}</p> : null}
             </div>
 
             {/* Footer image */}
