@@ -78,25 +78,31 @@ function TextArea({ noteId, data }) {
 }
 
 function TextEditor({ noteId, mutateSidebar }) {
-    const { data: note } = useApi<Note>(noteId ? `notes/${noteId}` : null);
+    const { data: note, isValidating } = useApi<Note>(noteId ? `notes/${noteId}` : null);
 
-    return note ? (
-        <div className='mt-12 mx-auto flex flex-col'>
-            <MetaInfo 
-                noteId={noteId}
-                title={note.header}
-                mutateSidebar={mutateSidebar}
-                date={new Date(note.updatedAt)}
-            />
-            <TextArea 
-                noteId={noteId}
-                data={note.details}
-            />
-        </div>
-    ) : (
+    return isValidating ? (
         <div className='mt-12 mx-auto'>
             Loading...
         </div>
+    ) : (
+        note ? (
+            <div className='mt-12 mx-auto flex flex-col'>
+                <MetaInfo 
+                    noteId={noteId}
+                    mutateSidebar={mutateSidebar}
+                    title={note.header}
+                    date={new Date(note.updatedAt)}
+                />
+                <TextArea 
+                    noteId={noteId}
+                    data={note.details}
+                />
+            </div>
+        ) : (
+            <div className='mt-12 mx-auto text-dark-3'>
+                Create a new note from the menu to the left...
+            </div>
+        )
     );
 }
 

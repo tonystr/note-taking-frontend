@@ -193,7 +193,7 @@ function SideTool({ tool, visible, hide }) {
         <div className='w-[320px]'>
             <div className={`${visible ? '' : 'hidden'} relative h-full px-2 py-1 bg-purple-5 border-l-[1px] border-solid border-dark-6 flex flex-col`}>
                 <button className='absolute right-4 top-4 text-dark-3' onClick={() => hide()}>X</button>
-                <Tool sets={sets} hide={hide} />
+                {sets ? <Tool sets={sets || []} hide={hide} /> : null}
             </div>
         </div>
     );

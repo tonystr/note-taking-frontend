@@ -4,6 +4,7 @@ import moreIcon from 'icons/more.png';
 import { useEffect, useState } from 'react'
 import { Note } from 'types'
 import { create, apiDelete } from 'utils/api'
+import { useRouter } from 'next/router';
 
 function Button({ onClick, children, className='', ...props }) {
     return (
@@ -63,6 +64,9 @@ function compareNotes(a, b) {
 }
 
 function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mutateNotes: Function, noteId: String, setNoteId: Function }) {
+    const [showUserSettings, setShowUserSettings] = useState(false);
+    const router = useRouter();
+
     const createNewNote = async () => {
         const note = await create('notes', { header: '', details: '' });
         setNoteId(() => note.id);
@@ -76,10 +80,18 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
     
     console.log(notes && notes.slice().sort(compareNotes));
 
+    useEffect(() => {
+        if (showUserSettings) {
+            const hideMenu = () => setShowUserSettings(() => false);
+            document.addEventListener('click', hideMenu);
+            return () => document.removeEventListener('click', hideMenu);
+        }
+    }, [showUserSettings]);
+
     return (
         <div className='flex flex-col text-dark-1 h-full w-64 bg-purple-5 border-solid border-r-[1px] border-dark-6'>
             <div className='select-none fill-white py-3 px-4 bg-purple-1 text-white flex justify-between cursor-pointer'>
-                <div>
+                <div className='truncate'>
                     <NotesIcon className='inline mr-4' />
                     Study notes
                 </div>
@@ -91,7 +103,7 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
             </div>
             <Button onClick={() => createNewNote()} className="relative mb-4 mt-1">
                 <span className="text-xl font-thin absolute top-0">+</span>
-                <span className="ml-8">Create new note</span>
+                <span className="ml-8 truncate">Create new note</span>
             </Button>
             {notes ? notes.slice().sort(compareNotes).map(note => (
                 <NoteButton 
@@ -104,9 +116,18 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
                 </NoteButton>
             )) : null}
             <div className="grow" />
-            <div className="select-none bg-purple-4 px-auto py-2 px-1 flex flex-col items-center">
+            <div 
+                className="select-none bg-purple-4 px-auto py-2 px-1 flex flex-col items-center cursor-pointer relative" 
+                onClick={() => setShowUserSettings(prev => !prev)}
+            >
                 <img src="https://cdn-01.atcampus.no/avatar/46b4269a-b506-433e-a331-3ad57615f85c.jpg" className="rounded-full w-[40px]" />
                 <span className="block group-hover:text-white text-sm text-dark-2">Profile</span>
+                {showUserSettings ? (<div className='absolute bottom-[101%] shadow-sm ml-1 bg-purple-5 border-[1px] border-purple-4 rounded-md py-1'>
+                    <MoreButton onClick={() => { 
+                        create('peder-auth/logout'); 
+                        router.push({ pathname: '/login' }) 
+                    }}>Logout</MoreButton>
+                </div>) : null}
             </div>
         </div>
     )
