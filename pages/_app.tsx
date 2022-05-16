@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app';
-import Head from 'next/Head';
+import Head from 'next/head';
 import 'styles/globals.css';
 
 function App({ Component, pageProps }: AppProps) {
@@ -8,7 +8,7 @@ function App({ Component, pageProps }: AppProps) {
             <Head>
                 <title>atcampus notes</title>
             </Head>
-            <Component {...pageProps} />;
+            <Component {...pageProps} />
         </>
     );
 }

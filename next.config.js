@@ -1,3 +1,7 @@
+const base_url = process.env.NODE_ENV === "production" ? 'https://atcampus-api.pederfosse.no' : "http://localhost:8080";
+
+console.log("node env:", process.env.NODE_ENV)
+
 module.exports = {
     poweredByHeader: false,
     eslint: {
@@ -16,13 +20,13 @@ module.exports = {
         return [
             {
                 source: '/api/:query',
-                destination: 'http://localhost:8080/:query'
+                destination: `${base_url}/:query`
             }, {
                 source: '/api/:query/:query2',
-                destination: 'http://localhost:8080/:query/:query2'
+                destination: `${base_url}/:query/:query2`
             }, {
                 source: '/api/:query/:query2/:query3',
-                destination: 'http://localhost:8080/:query/:query2/:query3'
+                destination: `${base_url}/:query/:query2/:query3`
             }
         ]
     }

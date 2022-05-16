@@ -25,10 +25,10 @@ function MetaInfo({ noteId, title: titleSource, mutateSidebar, date: dateSource 
     }, [dateSource, noteId]);
 
     return (
-        <div className='border-solid border-b-[1px] border-dark-5 flex justify-around items-baseline'>
+        <div className='border-solid border-b-[1px] border-dark-5 flex justify-between items-end'>
             <input
                 placeholder='Enter title here...'
-                className='text-dark-2 px-4 inline grow text-2xl outline-none selection:bg-purple-1 selection:text-white'
+                className='text-dark-2 px-4 inline grow text-xl outline-none selection:bg-purple-1 selection:text-white text-wrap'
                 value={title || ''}
                 onChange={e => {
                     const newTitle = e.target.value;
@@ -36,18 +36,9 @@ function MetaInfo({ noteId, title: titleSource, mutateSidebar, date: dateSource 
                     autosaveTitle(newTitle); 
                 }}
             />
-            <div className='text-dark-3 inline-block w-32 h-9 translate-y-2 text-xl text-center relative focus-within:bg-purple-1 focus-within:text-white rounded'>
-                <input
-                    className='cursor-pointer absolute grow inset-0 opacity-0'
-                    type='date'
-                    value={dateStr}
-                    onChange={e => { 
-                        const newDate = new Date(e.target.value);
-                        setDate(() => newDate); 
-                        autosaveDate(newDate); 
-                    }}
-                />
-                <div className='absolute inset-0 pointer-events-none'>
+            <div className='flex items-end justify-end text-dark-3 inline-block w-52 h-9 text-sm relative focus-within:bg-purple-1 focus-within:text-white rounded'>
+                <span>Last updated: </span>
+                <div className='inset-0 pointer-events-none'>
                     {dateStr.slice(8, 10)}.{dateStr.slice(5, 7)}.{dateStr.slice(0, 4)}
                 </div>
             </div>
@@ -81,12 +72,12 @@ function TextEditor({ noteId, mutateSidebar }) {
     const { data: note, isValidating } = useApi<Note>(noteId ? `notes/${noteId}` : null);
 
     return isValidating ? (
-        <div className='mt-12 mx-auto'>
+        <div className='mt-12 pl-12 mx-auto w-full flex flex-col'>
             Loading...
         </div>
     ) : (
         note ? (
-            <div className='mt-12 mx-auto flex flex-col'>
+            <div className='mt-12 pl-12 mx-auto w-full flex flex-col'>
                 <MetaInfo 
                     noteId={noteId}
                     mutateSidebar={mutateSidebar}

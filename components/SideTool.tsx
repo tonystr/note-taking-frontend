@@ -37,26 +37,27 @@ function Select({ value, options, onChange, ...props }) {
             value={value}
             onChange={e => onChange(e.target.value)}
         >
-            <option value="">--Please choose an option--</option>
+            <option value="">--Please choose an OOOoption--</option>
             {options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
+            className="hidden"
         </select>
     );
 }
 
 function QuestionTool({ sets, hide }) {
-    const [set, setSet] = useState('');
+    const [set, setSet] = useState(() => sets[0]?.id);
     const [questionInput, setQuestionInput] = useState('');
     const { data: questions, mutate: mutateQuestions } = useApi<Question[]>('qa/questions');
 
     return (
         <>
-            <h2 className="heading2Sidemenu">Ask a question in:</h2>
+            <h2 className="heading2Sidemenu">Ask a question</h2>
             
-            <Select 
+           {/*  <Select 
                 value={set}
                 options={sets ? sets.map(s => ({ value: s.id, text: s.name })) : []}
                 onChange={value => setSet(() => value)}
-            />
+            /> */}
 
             {/* Input bokser */}
             <CardInput
@@ -68,17 +69,16 @@ function QuestionTool({ sets, hide }) {
             />
 
             {/* Preview ferdig flashcards i sett */}
-            {set !== '' && sets ? (
+            {questions && sets ? (
                 <div className="overflow-y-scroll">
                     <h2 className="heading2Sidemenu">
-                        Relevant questions in {sets.find((s: { id: String }) => s.id === set)?.name}:
+                        Other questions:
                     </h2>
                     {questions.slice().reverse().map(question => (
                         <FlashcardPreview 
                             front={question.data} 
                             key={question.id} 
                             deleteCard={() => {
-                                console.log('brrr');
                                 apiDelete(`qa/questions/${question.id}`)
                                     .then(() => mutateQuestions());
                             }} 
@@ -101,21 +101,23 @@ function QuestionTool({ sets, hide }) {
 }
 
 function FlashcardTool({ sets, hide }) {
-    const [set, setSet] = useState('');
+    const [set, setSet] = useState(() => sets[0]?.id);
     const [questionInput, setQuestionInput] = useState('');
     const [answerInput, setAnswerInput] = useState('');
     const { data: flashcards, mutate: mutateFlashcards } = useApi<Flashcard[]>('flashcards');
+    
+    console.log(set);
 
     return (
         <>
-            <h2 className="heading2Sidemenu">Add a new flashcard in:</h2>
+            <h2 className="heading2Sidemenu">Add a new flashcard</h2>
 
             {/* Nedtrekk valg meny */}
-            <Select 
+        {/*     <Select 
                 value={set} 
                 options={sets.map(s => ({ value: s.id, text: s.name }))}
                 onChange={value => setSet(() => value)}
-            />
+            /> */}
 
             {/* Input bokser */}
             <CardInput
@@ -134,10 +136,10 @@ function FlashcardTool({ sets, hide }) {
             />
 
             {/* Preview ferdig flashcards i sett */}
-            {set !== '' && sets ? (
+            {flashcards && sets ? (
                 <div className="flex-shrink-1 overflow-y-scroll">
                     <h2 className="heading2Sidemenu">
-                        Flashcards in {sets.find((s: { id: String }) => s.id === set)?.name}:
+                        Flashcards:
                     </h2>
                     {flashcards.slice().reverse().map(card => (
                         <FlashcardPreview 

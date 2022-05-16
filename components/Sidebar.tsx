@@ -1,6 +1,7 @@
 import FolderIcon from 'icons/folder.svg'
 import NotesIcon from 'icons/notes.svg'
 import moreIcon from 'icons/more.png';
+import pfpIcon from 'icons/pfp_icon.png';
 import { useEffect, useState } from 'react'
 import { Note } from 'types'
 import { create, apiDelete } from 'utils/api'
@@ -33,7 +34,9 @@ function NoteButton({ deleteNote, onClick, children, selected, ...props }) {
     useEffect(() => {
         if (showMore) {
             const hideMenu = () => setShowMore(() => false);
-            document.addEventListener('click', hideMenu);
+            setTimeout(() => {
+                document.addEventListener('click', hideMenu);
+            }, 20);
             return () => document.removeEventListener('click', hideMenu);
         }
     }, [showMore]);
@@ -47,9 +50,7 @@ function NoteButton({ deleteNote, onClick, children, selected, ...props }) {
                 <img src={moreIcon.src} width={14} alt='' />
             </button>
             {showMore && (
-                <div className='absolute left-[100%] shadow-sm ml-1 top-0 bg-purple-5 border-[1px] border-purple-4 rounded-md py-1'>
-                    <MoreButton>Rename</MoreButton>
-                    <MoreButton>Move</MoreButton>
+                <div className='absolute left-[67%] top-[100%] z-10 shadow-sm ml-1 top-0 bg-purple-5 border-[1px] border-purple-4 rounded-md py-1'>
                     <MoreButton onClick={() => deleteNote()} className='text-red-600'>Delete</MoreButton>
                 </div>
             )}
@@ -63,7 +64,7 @@ function compareNotes(a, b) {
     return +ad - +bd;
 }
 
-function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mutateNotes: Function, noteId: String, setNoteId: Function }) {
+function Sidebar({ notes, mutateNotes, noteId, setNoteId, showFlashcardViewer }: { notes: Note[], mutateNotes: Function, noteId: String, setNoteId: Function, showFlashcardViewer: Function }) {
     const [showUserSettings, setShowUserSettings] = useState(false);
     const router = useRouter();
 
@@ -75,21 +76,27 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
 
     const deleteNote = () => {
         apiDelete(`notes/${noteId}`)
-            .then(() => mutateNotes());
+            .then(() => {
+                console.log(((notes[0].id === noteId ? notes[1]?.id : notes[0]?.id) || null));
+                setNoteId(() => {
+                    setTimeout(() => mutateNotes(), 20);
+                    return ((notes[0].id === noteId ? notes[1]?.id : notes[0]?.id) || null)
+                });
+            });
     };
     
-    console.log(notes && notes.slice().sort(compareNotes));
-
     useEffect(() => {
         if (showUserSettings) {
             const hideMenu = () => setShowUserSettings(() => false);
-            document.addEventListener('click', hideMenu);
+            setTimeout(() => {
+                document.addEventListener('click', hideMenu);
+            }, 20);
             return () => document.removeEventListener('click', hideMenu);
         }
     }, [showUserSettings]);
 
     return (
-        <div className='flex flex-col text-dark-1 h-full w-64 bg-purple-5 border-solid border-r-[1px] border-dark-6'>
+        <div className='flex flex-col text-dark-1 overflow-hidden h-full w-80 bg-purple-5 border-solid border-r-[1px] border-dark-6'>
             <div className='select-none fill-white py-3 px-4 bg-purple-1 text-white flex justify-between cursor-pointer'>
                 <div className='truncate'>
                     <NotesIcon className='inline mr-4' />
@@ -116,17 +123,22 @@ function Sidebar({ notes, mutateNotes, noteId, setNoteId }: { notes: Note[], mut
                 </NoteButton>
             )) : null}
             <div className="grow" />
+            <Button className='mb-2' onClick={showFlashcardViewer}>
+                View flashcards
+            </Button>
             <div 
                 className="select-none bg-purple-4 px-auto py-2 px-1 flex flex-col items-center cursor-pointer relative" 
                 onClick={() => setShowUserSettings(prev => !prev)}
             >
-                <img src="https://cdn-01.atcampus.no/avatar/46b4269a-b506-433e-a331-3ad57615f85c.jpg" className="rounded-full w-[40px]" />
+                <img src={pfpIcon.src} width={pfpIcon.width} height={pfpIcon.height} alt="User profile" />
                 <span className="block group-hover:text-white text-sm text-dark-2">Profile</span>
                 {showUserSettings ? (<div className='absolute bottom-[101%] shadow-sm ml-1 bg-purple-5 border-[1px] border-purple-4 rounded-md py-1'>
                     <MoreButton onClick={() => { 
                         create('peder-auth/logout'); 
                         router.push({ pathname: '/login' }) 
-                    }}>Logout</MoreButton>
+                    }}>
+                        Logout
+                    </MoreButton>
                 </div>) : null}
             </div>
         </div>

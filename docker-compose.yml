@@ -1,0 +1,9 @@
+version: "3"
+services:
+  app:
+    build:
+      context: ./
+    environment:
+      NEXT_TELEMETRY_DISABLED: 1
+    ports:
+      - "3010:3010"

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atcampus-notetaking-frontend-deployment
+  labels:
+    app: atcampus-notetaking-frontend
+spec:
+  progressDeadlineSeconds: 1000
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: atcampus-notetaking-frontend
+  template:
+    metadata:
+      labels:
+        app: atcampus-notetaking-frontend
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: atcampus-notetaking-frontend
+          ports:
+            - containerPort: {{ .Values.port }}
+          image: ghcr.io/atcampus/atcampus-notetaking-frontend/atcampus-notetaking-frontend:{{ .Values.imageTag }}
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: notetaking-docker-secrets

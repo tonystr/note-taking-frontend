@@ -54,7 +54,7 @@ function LoginForm({ setError, toggleRegisterForm }) {
     const router = useRouter();
 
     return (
-        <div className='w-9/12 m-auto p-2 '>
+        <form onSubmit={e => e.preventDefault()} className='w-9/12 m-auto p-2 '>
             <InputField onChange={setUsername} value={username} id="username" type="text" text="Username"/>
             <InputField onChange={setPassword} value={password} id="password" type="password" text="Password"/>
 
@@ -88,7 +88,7 @@ function LoginForm({ setError, toggleRegisterForm }) {
                     Registrer deg her!
                 </span>
             </p>
-        </div>
+        </form>
     );
 }
 
@@ -99,7 +99,7 @@ function RegisterForm({ setError, toggleLoginForm }) {
     const router = useRouter();
 
     return (
-       <div className='w-9/12 m-auto p-2 ' onSubmit={() => false}>
+       <form onSubmit={e => e.preventDefault()} className='w-9/12 m-auto p-2 '>
             <InputField onChange={setUsername} value={username} id="username" type="text" text="Create a username"/>
             <InputField onChange={setPassword} value={password} id="password" type="password" text="Choose a secure password"/>
             <InputField onChange={setPassword2} value={password2} id="password2" type="password" text="Type your password again"/>
@@ -141,7 +141,7 @@ function RegisterForm({ setError, toggleLoginForm }) {
                     Logg inn her!
                 </span>
             </p>
-       </div>
+       </form>
     );
 }
 

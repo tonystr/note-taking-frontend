@@ -5,6 +5,7 @@ import Toolbar from 'components/Toolbar';
 import Sidebar from 'components/Sidebar';
 import TextEditor from 'components/TextEditor';
 import SideTool from 'components/SideTool'
+import FlashcardViewer from '../components/FlashcardViewer';
 import { useRouter } from 'next/router';
 
 function NoteEditor() {
@@ -38,24 +39,29 @@ function NoteEditor() {
 
     // Auto select first note upon fetch
     useEffect(() => {
+        // @ts-ignore
         if (!isValidating && notes?.message === 'Forbidden') {
-            console.log('!K');
             router.push({ pathname: '/login' });
         } else if (notes && !isValidating && noteId === null) {
-            console.log(notes);
-            setNoteId(notes[0]?.id);
+            //setNoteId(notes[0]?.id || null);
         }
     }, [noteId, notes, isValidating]);
 
+    console.log(noteId);
+
     return notes && Array.isArray(notes) ? (
-        <div className='h-screen flex flex-col'>
+        <div className='h-screen flex flex-col overflow-hidden'>
             <Toolbar
                 viewFlashcardEditor={() => setSideTool(() => 'flashcard')}
                 viewQuestionEditoor={() => setSideTool(() => 'question')}
             />
-            <div className="flex h-full">
-                <Sidebar notes={notes} mutateNotes={mutateNotes} noteId={noteId} setNoteId={setNoteId} />
-                {noteId !== null ? <TextEditor noteId={noteId} mutateSidebar={mutateNotes} /> : 'No note selected :)'}
+            <div className="flex w-full h-full">
+                <Sidebar showFlashcardViewer={() => setNoteId(() => 'flashcard-viewer')} notes={notes} mutateNotes={mutateNotes} noteId={noteId} setNoteId={setNoteId} />
+                {noteId === 'flashcard-viewer' ? (
+                    <FlashcardViewer />
+                ) : (
+                    noteId !== null ? <TextEditor noteId={noteId} mutateSidebar={mutateNotes} /> : 'No note selected :)'
+                )}
                 <SideTool
                     visible={sideTool !== null}
                     tool={sideTool}
@@ -63,7 +69,7 @@ function NoteEditor() {
                 />
             </div>
         </div>
-    ) : <div>Loading...</div>;
+    ) : <div>Loading...</div>
 }
 
 export default NoteEditor;

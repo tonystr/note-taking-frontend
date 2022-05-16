@@ -1,0 +1,5 @@
+imageTag: "github.sha"
+port: 3010
+replicas: 1
+appLabel: "atcampus-notetaking-frontend"
+host: notetaking.dev.atcampus.eu

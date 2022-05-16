@@ -18,7 +18,6 @@ async function update(path: RequestInfo, options: {}) {
 }
 
 async function create(path: RequestInfo, options?: {}) {
-    console.log('sending: ', options);
     return fetch(`/api/${path}`, {
         method: 'POST',
         body: JSON.stringify(options),
